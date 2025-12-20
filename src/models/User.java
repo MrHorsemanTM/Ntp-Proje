@@ -9,6 +9,5 @@ public class User {
         this.email = email;
     }
 
-    // Getter metotları
     public String getName() { return name; }
 }
