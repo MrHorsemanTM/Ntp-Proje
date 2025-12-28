@@ -27,10 +27,9 @@ public class Order {
         System.out.println("Toplam Tutar: " + totalAmount + " TL");
     }
 
-    // Ödeme işlemini burada tetikliyoruz (Polimorfizm kullanımı)
     public void completeOrder(PaymentMethod paymentMethod) {
-        customer.placeOrder(); // Interface kullanımı
-        paymentMethod.pay(totalAmount); // Polimorfizm kullanımı
+        customer.placeOrder(); 
+        paymentMethod.pay(totalAmount);
         System.out.println("Sipariş başarıyla oluşturuldu!\n");
     }
 }
