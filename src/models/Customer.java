@@ -12,6 +12,7 @@ public class Customer extends User implements Orderable {
         this.phoneNumber = phoneNumber;
     }
 
+
     @Override
     public void placeOrder() {
         System.out.println("Sayın " + name + " " + surname + ", siparişiniz onaylandı.");
@@ -23,5 +24,7 @@ public class Customer extends User implements Orderable {
         return username + "," + password + "," + name + "," + surname + "," + phoneNumber + "," + address;
     }
 
-    public String getAddress() { return address; }
+    public String getAddress() { 
+        return address; 
+    }
 }

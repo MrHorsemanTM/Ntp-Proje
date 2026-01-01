@@ -17,7 +17,7 @@ public class Restaurant {
     }
 
     public void showMenu() {
-        System.out.println("--- " + name + " Menüsü ---");
+        System.out.println("\n--- " + name + " Menüsü ---");
         for (int i = 0; i < menu.size(); i++) {
             System.out.println((i + 1) + ". " + menu.get(i));
         }
@@ -29,6 +29,4 @@ public class Restaurant {
         }
         return null;
     }
-    
-    public int getMenuSize() { return menu.size(); }
 }
