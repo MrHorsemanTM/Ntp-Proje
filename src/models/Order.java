@@ -1,4 +1,5 @@
 package models;
+
 import payment.PaymentMethod;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +20,30 @@ public class Order {
         totalAmount += item.getPrice();
         System.out.println(item.getName() + " sepete eklendi.");
     }
+
     public void showOrderSummary() {
         System.out.println("\n--- Sipariş Özeti ---");
-        for (MenuItem item : items) {
-            System.out.println(item.getName() + ": " + item.getPrice() + " TL");
+        if(items.isEmpty()) {
+            System.out.println("Sepetiniz boş.");
+        } else {
+            for (MenuItem item : items) {
+                System.out.println(item.getName() + ": " + item.getPrice() + " TL");
+            }
         }
         System.out.println("Toplam Tutar: " + totalAmount + " TL");
     }
 
     public void completeOrder(PaymentMethod paymentMethod) {
-        customer.placeOrder(); 
+        if(items.isEmpty()) {
+            System.out.println("Sepet boş, sipariş tamamlanamaz!");
+            return;
+        }
+        customer.placeOrder();
         paymentMethod.pay(totalAmount);
         System.out.println("Sipariş başarıyla oluşturuldu!\n");
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
     }
 }
