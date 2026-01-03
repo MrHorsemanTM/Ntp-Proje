@@ -22,7 +22,7 @@ public class ProjectTests {
 
     @Test
     public void testOrderTotalCalculation() {
-        Customer testCustomer = new Customer("Ali", "Veli", "testuser", "123", "Adres", "555");
+        Customer testCustomer = new Customer("a", "b", "testuser", "123", "Adres", "555");
         Order order = new Order(testCustomer);
         
         order.addItem(new MenuItem("Yemek 1", 50.0, "Yemek"));
