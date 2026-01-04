@@ -15,9 +15,9 @@ public class Customer extends User implements Orderable {
 
     @Override
     public void placeOrder() {
-        System.out.println("Sayın " + name + " " + surname + ", siparişiniz onaylandı.");
+        System.out.println("siparişiniz onaylandı.");
         System.out.println("Teslimat Adresi: " + address);
-        System.out.println("İletişim: " + phoneNumber);
+        System.out.println("Telefeon Numarası: " + phoneNumber);
     }
     
     public String toFileFormat() {
