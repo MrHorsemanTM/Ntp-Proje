@@ -3,7 +3,7 @@ package app;
 import models.*;
 import payment.*;
 import utils.AuthManager;
-import utils.CouponManager; 
+import utils.CouponManager;
 import java.util.Scanner;
 
 public class Main {
@@ -11,9 +11,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Customer activeUser = null;
 
-
         while (activeUser == null) {
-            System.out.println("\n=== YEMEK SİPARİŞ SİSTEMİ ===");
+            System.out.println("\n=========================================");
+            System.out.println("      YEMEK SİPARİŞ SİSTEMİNE HOŞGELDİNİZ");
+            System.out.println("=========================================");
             System.out.println("1. Giriş Yap");
             System.out.println("2. Kayıt Ol");
             System.out.println("0. Çıkış");
@@ -28,11 +29,10 @@ public class Main {
             }
 
             if (choice == 0) {
-                System.out.println("Çıkış yapılıyor...");
+                System.out.println("Çıkış yapılıyor... İyi günler!");
                 return;
             } 
             else if (choice == 1) {
-          
                 System.out.print("Kullanıcı Adı: ");
                 String uName = scanner.nextLine();
                 System.out.print("Şifre: ");
@@ -41,13 +41,12 @@ public class Main {
                 activeUser = AuthManager.login(uName, uPass);
 
                 if (activeUser != null) {
-                    System.out.println("\nGiriş Başarılı! Hoşgeldiniz, " + activeUser.getName());
+                    System.out.println("\n>>> Giriş Başarılı! Hoşgeldiniz, " + activeUser.getName() + " " + activeUser.getSurname());
                 } else {
                     System.out.println("HATA: Kullanıcı adı veya şifre yanlış!");
                 }
             } 
             else if (choice == 2) {
-         
                 System.out.println("\n--- YENİ KULLANICI KAYDI ---");
                 System.out.print("Adınız: "); String name = scanner.nextLine();
                 System.out.print("Soyadınız: "); String surname = scanner.nextLine();
@@ -55,41 +54,43 @@ public class Main {
                 System.out.print("Şifre: "); String password = scanner.nextLine();
                 System.out.print("Telefon: "); String phone = scanner.nextLine();
                 
-                System.out.println("Adres (Tek satırda giriniz): ");
+                System.out.println("Adres (Lütfen tek satırda giriniz): ");
                 String address = scanner.nextLine();
                 address = address.replace(",", " -"); 
 
                 if (name.isEmpty() || surname.isEmpty() || username.isEmpty() || 
                     password.isEmpty() || phone.isEmpty() || address.isEmpty()) {
-                    System.out.println("HATA: Tüm alanları doldurmalısınız!");
+                    System.out.println("HATA: Tüm alanları doldurmanız zorunludur!");
                 } else {
                     Customer newCustomer = new Customer(name, surname, username, password, address, phone);
                     boolean result = AuthManager.register(newCustomer);
                     if (result) {
-                        System.out.println("Kayıt başarılı! Lütfen giriş yapınız.");
+                        System.out.println(">>> Kayıt başarılı! Lütfen giriş yapınız.");
                     }
                 }
             } 
             else {
-                System.out.println("Geçersiz seçim.");
+                System.out.println("Geçersiz seçim. Lütfen tekrar deneyin.");
             }
         }
-
-
         Restaurant restaurant = new Restaurant("Lezzet Durağı");
         restaurant.addMenuItem(new MenuItem("Lahmacun", 50, "Ana Yemek"));
         restaurant.addMenuItem(new MenuItem("Adana Kebap", 120, "Ana Yemek"));
+        restaurant.addMenuItem(new MenuItem("Beyti Sarma", 140, "Ana Yemek"));
+        restaurant.addMenuItem(new MenuItem("Mercimek Çorbası", 40, "Çorba"));
         restaurant.addMenuItem(new MenuItem("Ayran", 15, "İçecek"));
+        restaurant.addMenuItem(new MenuItem("Şalgam", 20, "İçecek"));
         restaurant.addMenuItem(new MenuItem("Künefe", 80, "Tatlı"));
-
+        restaurant.addMenuItem(new MenuItem("Sütlaç", 60, "Tatlı"));
         Order currentOrder = new Order(activeUser);
-
         while (true) {
-            System.out.println("\n--- ANA MENÜ ---");
+            System.out.println("\n-----------------------------------------");
+            System.out.println("            ANA İŞLEM MENÜSÜ");
+            System.out.println("-----------------------------------------");
             System.out.println("1. Menüyü Gör");
             System.out.println("2. Sepete Ürün Ekle");
             System.out.println("3. Sipariş Özeti");
-            System.out.println("4. Ödeme ve Tamamla"); 
+            System.out.println("4. Ödeme Yap ve Siparişi Tamamla");
             System.out.println("0. Çıkış");
             System.out.print("Seçiminiz: ");
             
@@ -101,30 +102,45 @@ public class Main {
                 appChoice = -1;
             }
 
-            if (appChoice == 0) break;
+            if (appChoice == 0) {
+                System.out.println("Çıkış yapılıyor... Bizi tercih ettiğiniz için teşekkürler!");
+                break;
+            }
 
             switch (appChoice) {
                 case 1:
                     restaurant.showMenu();
                     break;
+
                 case 2:
                     restaurant.showMenu();
-                    System.out.print("Ürün Numarası: ");
+                    System.out.print("\nEklemek istediğiniz ürün numarası: ");
                     try {
                         String input = scanner.nextLine();
                         int index = Integer.parseInt(input) - 1;
                         MenuItem item = restaurant.getItem(index);
-                        if (item != null) currentOrder.addItem(item);
-                        else System.out.println("Geçersiz ürün numarası.");
+                        
+                        if (item != null) {
+                            currentOrder.addItem(item);
+                        } else {
+                            System.out.println("HATA: Geçersiz ürün numarası.");
+                        }
                     } catch (NumberFormatException e) {
-                        System.out.println("Lütfen sayı giriniz.");
+                        System.out.println("HATA: Lütfen sayı giriniz.");
                     }
                     break;
+
                 case 3:
                     currentOrder.showOrderSummary();
                     break;
+
                 case 4:
-              
+                    if (currentOrder.getTotalAmount() <= 0) {
+                        System.out.println("Sepetiniz boş! Önce ürün eklemelisiniz.");
+                        break;
+                    }
+
+                    System.out.println("\n--- ÖDEME EKRANI ---");
                     System.out.print("İndirim kuponunuz var mı? (E/H): ");
                     String hasCoupon = scanner.nextLine();
                     
@@ -136,35 +152,54 @@ public class Main {
                         if (coupon != null) {
                             boolean applied = currentOrder.applyCoupon(coupon);
                             if (applied) {
-                                System.out.println("Kupon uygulandı! %" + coupon.getDiscountPercentage() + " indirim kazandınız.");
+                                System.out.println(">>> TEBRİKLER! %" + coupon.getDiscountPercentage() + " indirim uygulandı.");
                             }
                         } else {
-                            System.out.println("Geçersiz veya süresi dolmuş kupon kodu.");
+                            System.out.println("UYARI: Geçersiz veya süresi dolmuş kupon kodu.");
                         }
                     }
-                    
-                 
                     currentOrder.showOrderSummary();
-
-               
-                    System.out.println("\nÖdeme Yöntemi: 1-Kredi Kartı, 2-Nakit");
+                    System.out.println("\nLütfen Ödeme Yöntemi Seçiniz:");
+                    System.out.println("1 - Kredi Kartı");
+                    System.out.println("2 - Nakit (Kapıda Ödeme)");
+                    System.out.print("Seçiminiz: ");
                     String payStr = scanner.nextLine();
                     
+                    boolean paymentSuccess = false;
+
                     if(payStr.equals("1")) {
                         currentOrder.completeOrder(new CreditCardPayment());
-                        currentOrder = new Order(activeUser); 
+                        paymentSuccess = true;
                     } else if (payStr.equals("2")) {
                         currentOrder.completeOrder(new CashPayment());
-                        currentOrder = new Order(activeUser);
+                        paymentSuccess = true;
                     } else {
-                        System.out.println("Geçersiz ödeme yöntemi.");
+                        System.out.println("HATA: Geçersiz ödeme yöntemi seçildi. İşlem iptal edildi.");
+                    }
+                    if (paymentSuccess) {
+                        System.out.println("\n-----------------------------------------");
+                        System.out.println("Hizmetimizden memnun kaldınız mı?");
+                        System.out.println("Restoranımızı 1 ile 5 arasında puanlayabilirsiniz.");
+                        System.out.print("Puanınız (Atlamak için Enter'a basınız): ");
+                        
+                        try {
+                            String scoreInput = scanner.nextLine();
+                            if (!scoreInput.isEmpty()) {
+                                int score = Integer.parseInt(scoreInput);
+                                restaurant.addRating(score);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Puanlama geçildi.");
+                        }
+                        System.out.println("\nYeni sipariş için yönlendiriliyorsunuz...");
+                        currentOrder = new Order(activeUser);
                     }
                     break;
+
                 default:
-                    System.out.println("Geçersiz işlem.");
+                    System.out.println("Geçersiz işlem numarası.");
             }
         }
-        System.out.println("İyi günler dileriz!");
         scanner.close();
     }
 }
