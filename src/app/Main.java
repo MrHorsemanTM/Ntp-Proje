@@ -1,13 +1,16 @@
 package app;
+
 import models.*;
 import payment.*;
 import utils.AuthManager;
+import utils.CouponManager; 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Customer activeUser = null;
+
 
         while (activeUser == null) {
             System.out.println("\n=== YEMEK SİPARİŞ SİSTEMİ ===");
@@ -18,7 +21,8 @@ public class Main {
 
             int choice;
             try {
-                choice = Integer.parseInt(scanner.nextLine());
+                String input = scanner.nextLine();
+                choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 choice = -1;
             }
@@ -28,7 +32,7 @@ public class Main {
                 return;
             } 
             else if (choice == 1) {
-       
+          
                 System.out.print("Kullanıcı Adı: ");
                 String uName = scanner.nextLine();
                 System.out.print("Şifre: ");
@@ -43,7 +47,8 @@ public class Main {
                 }
             } 
             else if (choice == 2) {
-               System.out.println("\n--- YENİ KULLANICI KAYDI ---");
+         
+                System.out.println("\n--- YENİ KULLANICI KAYDI ---");
                 System.out.print("Adınız: "); String name = scanner.nextLine();
                 System.out.print("Soyadınız: "); String surname = scanner.nextLine();
                 System.out.print("Kullanıcı Adı: "); String username = scanner.nextLine();
@@ -69,6 +74,8 @@ public class Main {
                 System.out.println("Geçersiz seçim.");
             }
         }
+
+
         Restaurant restaurant = new Restaurant("Lezzet Durağı");
         restaurant.addMenuItem(new MenuItem("Lahmacun", 50, "Ana Yemek"));
         restaurant.addMenuItem(new MenuItem("Adana Kebap", 120, "Ana Yemek"));
@@ -82,13 +89,14 @@ public class Main {
             System.out.println("1. Menüyü Gör");
             System.out.println("2. Sepete Ürün Ekle");
             System.out.println("3. Sipariş Özeti");
-            System.out.println("4. Siparişi Tamamla");
+            System.out.println("4. Ödeme ve Tamamla"); 
             System.out.println("0. Çıkış");
             System.out.print("Seçiminiz: ");
             
             int appChoice;
             try {
-                appChoice = Integer.parseInt(scanner.nextLine());
+                String input = scanner.nextLine();
+                appChoice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 appChoice = -1;
             }
@@ -103,7 +111,8 @@ public class Main {
                     restaurant.showMenu();
                     System.out.print("Ürün Numarası: ");
                     try {
-                        int index = Integer.parseInt(scanner.nextLine()) - 1;
+                        String input = scanner.nextLine();
+                        int index = Integer.parseInt(input) - 1;
                         MenuItem item = restaurant.getItem(index);
                         if (item != null) currentOrder.addItem(item);
                         else System.out.println("Geçersiz ürün numarası.");
@@ -115,8 +124,32 @@ public class Main {
                     currentOrder.showOrderSummary();
                     break;
                 case 4:
-                    System.out.println("Ödeme Yöntemi: 1-Kredi Kartı, 2-Nakit");
+              
+                    System.out.print("İndirim kuponunuz var mı? (E/H): ");
+                    String hasCoupon = scanner.nextLine();
+                    
+                    if (hasCoupon.equalsIgnoreCase("E")) {
+                        System.out.print("Kupon Kodunu Giriniz: ");
+                        String code = scanner.nextLine();
+                        Coupon coupon = CouponManager.getCoupon(code);
+                        
+                        if (coupon != null) {
+                            boolean applied = currentOrder.applyCoupon(coupon);
+                            if (applied) {
+                                System.out.println("Kupon uygulandı! %" + coupon.getDiscountPercentage() + " indirim kazandınız.");
+                            }
+                        } else {
+                            System.out.println("Geçersiz veya süresi dolmuş kupon kodu.");
+                        }
+                    }
+                    
+                 
+                    currentOrder.showOrderSummary();
+
+               
+                    System.out.println("\nÖdeme Yöntemi: 1-Kredi Kartı, 2-Nakit");
                     String payStr = scanner.nextLine();
+                    
                     if(payStr.equals("1")) {
                         currentOrder.completeOrder(new CreditCardPayment());
                         currentOrder = new Order(activeUser); 
