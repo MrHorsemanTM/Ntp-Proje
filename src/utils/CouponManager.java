@@ -8,9 +8,9 @@ public class CouponManager {
     private static List<Coupon> coupons = new ArrayList<>();
     static {
     	
-        coupons.add(new Coupon("MERHABA10", 10)); 
-        coupons.add(new Coupon("YEMEK20", 20));   
-        coupons.add(new Coupon("FIRSAT50", 50));  
+        coupons.add(new Coupon("SEPET10", 10)); 
+        coupons.add(new Coupon("SEPET20", 20));   
+        coupons.add(new Coupon("SEPET50", 50));  
     }
     
     public static Coupon getCoupon(String code) {

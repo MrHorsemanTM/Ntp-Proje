@@ -12,9 +12,7 @@ public class Main {
         Customer activeUser = null;
 
         while (activeUser == null) {
-            System.out.println("\n=========================================");
             System.out.println("      YEMEK SİPARİŞ SİSTEMİNE HOŞGELDİNİZ");
-            System.out.println("=========================================");
             System.out.println("1. Giriş Yap");
             System.out.println("2. Kayıt Ol");
             System.out.println("0. Çıkış");
@@ -75,8 +73,8 @@ public class Main {
         }
         Restaurant restaurant = new Restaurant("Lezzet Durağı");
         restaurant.addMenuItem(new MenuItem("Lahmacun", 50, "Ana Yemek"));
-        restaurant.addMenuItem(new MenuItem("Adana Kebap", 120, "Ana Yemek"));
-        restaurant.addMenuItem(new MenuItem("Beyti Sarma", 140, "Ana Yemek"));
+        restaurant.addMenuItem(new MenuItem("Pide", 120, "Ana Yemek"));
+        restaurant.addMenuItem(new MenuItem("Akçaabat Köfte", 140, "Ana Yemek"));
         restaurant.addMenuItem(new MenuItem("Mercimek Çorbası", 40, "Çorba"));
         restaurant.addMenuItem(new MenuItem("Ayran", 15, "İçecek"));
         restaurant.addMenuItem(new MenuItem("Şalgam", 20, "İçecek"));
@@ -84,9 +82,7 @@ public class Main {
         restaurant.addMenuItem(new MenuItem("Sütlaç", 60, "Tatlı"));
         Order currentOrder = new Order(activeUser);
         while (true) {
-            System.out.println("\n-----------------------------------------");
             System.out.println("            ANA İŞLEM MENÜSÜ");
-            System.out.println("-----------------------------------------");
             System.out.println("1. Menüyü Gör");
             System.out.println("2. Sepete Ürün Ekle");
             System.out.println("3. Sipariş Özeti");
@@ -177,7 +173,6 @@ public class Main {
                         System.out.println("HATA: Geçersiz ödeme yöntemi seçildi. İşlem iptal edildi.");
                     }
                     if (paymentSuccess) {
-                        System.out.println("\n-----------------------------------------");
                         System.out.println("Hizmetimizden memnun kaldınız mı?");
                         System.out.println("Restoranımızı 1 ile 5 arasında puanlayabilirsiniz.");
                         System.out.print("Puanınız (Atlamak için Enter'a basınız): ");
